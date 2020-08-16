@@ -13,17 +13,23 @@ function App() {
   const [totalProductCount, setTotalProductsCount] =useState(0);
   const handleIncrement = (key) => {
     let updatedProductLists = [ ...productLists]
-    updatedProductLists[key].count = updatedProductLists[key].count + 1;
+    updatedProductLists = updatedProductLists.map((item) => {
+      if(key === item.id){
+        item.count += 1; 
+      }
+      return item;
+    });
     setProductLists(updatedProductLists); 
   }
   const handleDecrement = (key) => {
     let updatedProductLists = [...productLists]
-    if(updatedProductLists[key].count > 0){
-      updatedProductLists[key].count = updatedProductLists[key].count - 1;
+      updatedProductLists = updatedProductLists.map((item) => {
+        if(key === item.id && item.count > 0){
+          item.count -= 1; 
+        }
+        return item;
+      });
       setProductLists(updatedProductLists);
-    }else{
-      alert('canot be less than zero');
-    }
   }
   const handleDelete = (key) => {
     let updatedProductLists = [ ...productLists]
@@ -32,10 +38,13 @@ function App() {
     setProductLists(updatedProductLists); 
   }
   useEffect(()=>{
+    if(productLists){
     let totalProductCount = productLists.map((item) => item.count);
     totalProductCount = totalProductCount.reduce((a, b) => a + b, 0)
     setTotalProductsCount(totalProductCount);
+    }
   },[productLists]);
+
   return (
     <div className="App">
       <Counter totalCount={totalProductCount}/>
